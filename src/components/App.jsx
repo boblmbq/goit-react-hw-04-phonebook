@@ -25,7 +25,11 @@ export const App = () => {
   };
 
   const onDeleteItem = name => {
-    setContacts(contacts.filter(item => item.name !== name));
+    setContacts(prevContacts => {
+      const updatedContacts = prevContacts.filter(item => item.name !== name);
+      localStorage.setItem(LIST_OF_CONTACTS, JSON.stringify(updatedContacts));
+      return updatedContacts;
+    });
   };
 
   const onFilterChange = evt => {
