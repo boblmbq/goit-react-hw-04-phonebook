@@ -7,13 +7,22 @@ import css from './app.module.css';
 const LIST_OF_CONTACTS = 'ListOfContacts';
 
 export const App = () => {
-  //набагато краще тут було б використовувати useReducer але спробував через useState
-  const [contacts, setContacts] = useState([]);
+  const [contacts, setContacts] = useState(storagedValue());
   const [filter, setFilter] = useState('');
+
+  useEffect(() => {
+    localStorage.setItem(LIST_OF_CONTACTS, JSON.stringify(contacts));
+  }, [contacts]);
+
+  function storagedValue() {
+    const savedContactsList = localStorage.getItem(LIST_OF_CONTACTS);
+    if (savedContactsList) return JSON.parse(savedContactsList);
+    return [];
+  }
 
   const formSubmitData = data => {
     const ifSome = contacts.some(
-      name => name.name.toLowerCase() === data.name.toLowerCase()
+      id => id.id.toLowerCase() === data.id.toLowerCase()
     );
     if (ifSome) {
       alert(`The contact with name "${data.name}" is already aded`);
@@ -24,27 +33,15 @@ export const App = () => {
     });
   };
 
-  const onDeleteItem = name => {
+  const onDeleteItem = id => {
     setContacts(prevContacts => {
-      const updatedContacts = prevContacts.filter(item => item.name !== name);
-      localStorage.setItem(LIST_OF_CONTACTS, JSON.stringify(updatedContacts));
-      return updatedContacts;
+      return prevContacts.filter(item => item.id !== id);
     });
   };
 
   const onFilterChange = evt => {
     setFilter(evt.currentTarget.value);
   };
-
-  useEffect(() => {
-    const savedContactsList = localStorage.getItem(LIST_OF_CONTACTS);
-    if (savedContactsList) setContacts(JSON.parse(savedContactsList));
-  }, []);
-
-  useEffect(() => {
-    contacts.length &&
-      localStorage.setItem(LIST_OF_CONTACTS, JSON.stringify(contacts));
-  }, [contacts]);
 
   const getFilteredContacts = () => {
     return contacts.filter(el =>

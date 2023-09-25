@@ -4,16 +4,16 @@ const ContactList = props => {
   const { filteredContacts, onDeleteItem } = props;
   return (
     <ul>
-      {filteredContacts.map(({ name, number }) => {
+      {filteredContacts.map(({ name, number, id }) => {
         return (
-          <li key={name}>
+          <li key={id}>
             <p>
               {name}: {number}
             </p>
             <button
               type="button"
               onClick={() => {
-                onDeleteItem(name);
+                onDeleteItem(id);
               }}
             >
               Delete

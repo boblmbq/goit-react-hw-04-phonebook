@@ -1,3 +1,7 @@
+import { customAlphabet } from 'nanoid';
+
+const id = customAlphabet("1234567890", 4)
+
 export const CHANGING = 'CHANGING';
 export const RESETING = 'RESETING';
 
@@ -7,6 +11,7 @@ export const formReducer = (prevState, action) => {
       return {
         ...prevState,
         [action.payload?.name]: action.payload?.value,
+        id: id(),
       };
     case RESETING:
       return {
